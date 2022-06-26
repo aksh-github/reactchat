@@ -1,0 +1,104 @@
+{
+  "$": "template",
+  "props": { "version": "1.0" },
+  "children": [
+    {
+      "$": "div",
+      "props": { "className": "chat-container" },
+      "children": [
+        {
+          "$": "header",
+          "props": {},
+          "children": [
+            { "$": "div", "props": {}, "children": ["Room: {props.room}"] }
+          ]
+        },
+        {
+          "$": "div",
+          "props": { "className": "chat-row" },
+          "children": [
+            {
+              "$": "div",
+              "props": { "className": "messages" },
+              "children": [
+                {
+                  "$": "For",
+                  "props": {
+                    "custom": "{\"each\":\"${@g.messages}\",\"as\":\"div\"}"
+                  },
+                  "children": [
+                    {
+                      "$": "div",
+                      "props": {},
+                      "children": [
+                        {
+                          "$": "div",
+                          "props": {
+                            "className": "me  w3-animate-bottom",
+                            "custom": "{\"hide\": {\"!=\": [\"me\", \"${@l.from}\"]}}"
+                          },
+                          "children": [
+                            {
+                              "$": "span",
+                              "props": {},
+                              "children": ["${@l.message}"]
+                            }
+                          ]
+                        },
+                        {
+                          "$": "div",
+                          "props": {
+                            "className": "other  w3-animate-top",
+                            "custom": "{\"hide\": {\"==\": [\"me\", \"${@l.from}\"]}}"
+                          },
+                          "children": [
+                            {
+                              "$": "p",
+                              "props": {},
+                              "children": ["${@l.from}"]
+                            },
+                            {
+                              "$": "span",
+                              "props": {},
+                              "children": ["${@l.message}"]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "$": "footer",
+          "props": {},
+          "children": [
+            {
+              "$": "textarea",
+              "props": {
+                "name": "txtmsg",
+                "rows": "8",
+                "placeholder": "Type your message..."
+              },
+              "children": []
+            },
+            {
+              "$": "button",
+              "props": { "disabled": "${@g.sendBtnFlag}" },
+              "children": [
+                {
+                  "$": "div",
+                  "props": { "className": "wrapper" },
+                  "children": ["✈️"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

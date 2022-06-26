@@ -1,0 +1,41 @@
+{
+  "$": "template",
+  "props": { "version": "1.0" },
+  "children": [
+    {
+      "$": "div",
+      "props": { "className": "welcome" },
+      "children": [
+        {
+          "$": "header",
+          "props": {},
+          "children": [{ "$": "div", "props": {}, "children": ["Solid Chat"] }]
+        },
+        {
+          "$": "input",
+          "props": {
+            "value": "${@g.user}",
+            "name": "txtuser",
+            "placeholder": "User name",
+            "max": "10"
+          },
+          "children": []
+        },
+        {
+          "$": "input",
+          "props": {
+            "value": "${@g.room}",
+            "name": "txtroom",
+            "placeholder": "Room name"
+          },
+          "children": []
+        },
+        {
+          "$": "button",
+          "props": { "name": "btnGo", "disabled": "${@g.chatBtnFlag}" },
+          "children": ["Lets Chat"]
+        }
+      ]
+    }
+  ]
+}
