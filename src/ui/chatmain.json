@@ -10,7 +10,18 @@
           "$": "header",
           "props": {},
           "children": [
-            { "$": "div", "props": {}, "children": ["Room: {props.room}"] }
+            {
+              "$": "div",
+              "props": {},
+              "children": [
+                {
+                  "$": "button",
+                  "props": { "name": "goBack" },
+                  "children": ["Back"]
+                },
+                "Room: ${@g.room}"
+              ]
+            }
           ]
         },
         {
@@ -81,14 +92,19 @@
               "props": {
                 "name": "txtmsg",
                 "rows": "8",
-                "placeholder": "Type your message..."
+                "placeholder": "Type your message...",
+                "value": "${@g.message}"
               },
               "children": []
             },
             {
               "$": "button",
-              "props": { "disabled": "${@g.sendBtnFlag}" },
-              "children": [
+              "props": {
+                "disabled": "${@g.sendBtnFlag}",
+                "name": "sendMessage"
+              },
+              "children": ["✈️"],
+              "children2": [
                 {
                   "$": "div",
                   "props": { "className": "wrapper" },

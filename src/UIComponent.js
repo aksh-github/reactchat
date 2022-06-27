@@ -1,9 +1,11 @@
 import "./App.css";
 import React, { useState, useEffect, Component } from "react";
-import { inject, xml2json } from "./uiLib/util";
+// import { inject, xml2json } from "./uiLib/util";
 import { UIBuilder } from "./uiLib/UIBuilder";
 import { GlobalProvider } from "./uiLib/GlobalContext";
 import { useNavigate, useLocation } from "react-router-dom";
+import useChat from "./utils/uiChat";
+import useStore from "./utils/store";
 
 const routeData = {
   "/": {
@@ -68,12 +70,19 @@ function UIComponent() {
   // console.log(location);
 
   const path = location ? location.pathname : "/"; //this will be route
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState(msgs);
-  const [user, setUser] = useState("");
-  const [room, setRoom] = useState("");
+
+  const { user, room, setRoom, setUser, message, setMessage, messages } =
+    useStore();
 
   let navigate = useNavigate();
+
+  // imp step
+
+  if ((!user || !room) && path === "/room") {
+    navigate("/");
+  }
+
+  const { sendMessage } = useChat({ user, room });
 
   const _data = {
     intro: {
@@ -83,12 +92,19 @@ function UIComponent() {
       tpd: " col ",
     },
     main: {
+      room,
       message: message,
       messages: messages,
-      sendBtnFlag: message || message.length < 1,
+      sendBtnFlag: message.length < 1,
     },
   };
   const [Ui, setUi] = useState(null);
+
+  useEffect(() => {
+    return () => {
+      console.log("cleanup");
+    };
+  }, []);
 
   useEffect(() => {
     const res = require(`./ui/${routeData[path].jsonKey}`);
@@ -102,14 +118,24 @@ function UIComponent() {
 
     switch (e.target?.name) {
       case "btnGo":
-        // if (user.length < 4 || room.length < 4) {
-        //   console.log("> 4 reqd");
-        //   return;
-        // }
+        if (user.length < 4 || room.length < 4) {
+          console.log("> 4 reqd");
+          return;
+        }
 
         console.log("processed");
 
-        navigate("/room", { replace: true });
+        navigate("/room");
+
+        break;
+
+      case "goBack":
+        navigate(-1);
+
+        break;
+
+      case "sendMessage":
+        sendMessage();
 
         break;
     }
@@ -117,19 +143,19 @@ function UIComponent() {
 
   const textChanged = (e) => {
     // console.log(e);
+    let txt = e.target.value;
 
     switch (e.target?.name) {
       case "txtmsg":
         // console.log("change in username");
-        setMessage(e.target.value);
+        setMessage(txt);
         break;
       case "txtuser":
         // console.log("change in username");
-        setUser(e.target.value);
+        setUser(txt?.trim());
         break;
       case "txtroom":
-        // console.log("change in roomname");
-        setRoom(e.target.value);
+        setRoom(txt?.trim());
         break;
     }
   };
