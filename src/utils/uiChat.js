@@ -29,6 +29,7 @@ const useChat = ({ user, room }) => {
     // });
     if (user && room)
       socketRef.current = socketIOClient(
+        // socket = io(`https://crawler-app.herokuapp.com`, {
         `http://${window.location.hostname}:7000`,
         {
           query: { user: user, room: room },
