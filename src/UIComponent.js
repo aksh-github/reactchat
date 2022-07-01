@@ -71,8 +71,7 @@ function UIComponent() {
 
   const path = location ? location.pathname : "/"; //this will be route
 
-  const { user, room, setRoom, setUser, message, setMessage, messages } =
-    useStore();
+  const { user, room, setRoom, setUser, message, setMessage, messages, isConnected } = useStore();
 
   let navigate = useNavigate();
 
@@ -95,7 +94,8 @@ function UIComponent() {
       room,
       message: message,
       messages: messages,
-      sendBtnFlag: message.length < 1,
+      sendBtnFlag: message?.length < 1 || !isConnected,
+      isConnText: isConnected ? ":)" : ":(",
     },
   };
   const [Ui, setUi] = useState(null);
@@ -138,6 +138,8 @@ function UIComponent() {
         sendMessage();
 
         break;
+      default:
+        console.log("No handler for ", e.target?.name);
     }
   };
 
@@ -157,6 +159,8 @@ function UIComponent() {
       case "txtroom":
         setRoom(txt?.trim());
         break;
+      default:
+        console.log("No handler for ", e.target?.name);
     }
   };
 

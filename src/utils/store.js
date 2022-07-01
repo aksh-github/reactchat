@@ -6,6 +6,7 @@ const useStore = create((set) => ({
   user: "",
   room: "",
   publicKey: null,
+  isConnected: false,
   setMessage: (newMsg) =>
     set((state) => ({
       ...state,
@@ -34,6 +35,12 @@ const useStore = create((set) => ({
       ...state,
       publicKey: pk,
     })),
+  setIsConnected: (nf) => {
+    set((state) => ({
+      ...state,
+      isConnected: nf,
+    }));
+  },
 }));
 
 export default useStore;

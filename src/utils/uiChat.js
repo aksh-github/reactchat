@@ -19,6 +19,7 @@ const useChat = ({ user, room }) => {
     setMessages,
     publicKey,
     setPublickey,
+    setIsConnected,
   } = useStore();
 
   const socketRef = useRef();
@@ -39,19 +40,38 @@ const useChat = ({ user, room }) => {
     // imp step reset msgs
     // setMessages([]);
 
+    if (socketRef.current.connected) setIsConnected(true);
+    else setIsConnected(false);
+
+    socketRef?.current?.on("connect", (data) => {
+      console.log("connected now");
+      setIsConnected(true);
+      // else setIsConnected(false);
+    });
+
     socketRef?.current?.on("_", (data) => {
       setPublickey(data.publicKey);
+    });
+
+    socketRef?.current?.on("disconnect", () => {
+      // console.log(socketRef?.current?.id); // undefined
+      console.log("disonnected");
+      setIsConnected(false);
     });
 
     return () => {
       console.log("conn cleaned");
       socketRef?.current?.disconnect();
+      setIsConnected(false);
     };
   }, [user, room]);
 
   socketRef?.current?.on("new_message", (data) => {
     const decrypted = decryptText(data, publicKey) || "";
     let _message = null;
+
+    if (!decrypted) return;
+
     try {
       _message = JSON.parse(decrypted);
     } catch (err) {
